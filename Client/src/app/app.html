@@ -1,0 +1,13 @@
+<div class="card bg-amber-400 w-96 shadow-sm mx-auto">
+<h2 class="text-3xl text-red-500 text-center">
+  {{ title }}!!
+</h2>
+<div class="list">
+  @for (member of members();track members().id){
+    <button class="list-row items-center">{{ member.id }} </button>
+  }
+</div>
+</div>
+<button class="btn w-34 rounded-full">One</button>
+<button class="btn btn-secondary">Two</button>
+<button class="btn btn-accent btn-outline">Three</button>
