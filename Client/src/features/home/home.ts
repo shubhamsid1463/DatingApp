@@ -1,0 +1,21 @@
+import { Component, signal,Input } from '@angular/core';
+import { Register } from "../account/register/register";
+import { User } from '../../types/user';
+
+@Component({
+  selector: 'app-home',
+  imports: [Register],
+  templateUrl: './home.html',
+  styleUrl: './home.css'
+})
+export class Home {
+
+ protected registerMode = signal(false);
+ showRegister(val: boolean)
+ {
+  this.registerMode.set(val);
+ }
+ handleCancelRegister($event: boolean) {
+    this.registerMode.set(false);
+}
+}
