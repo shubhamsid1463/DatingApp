@@ -21,7 +21,7 @@ export class Nav {
       error:error=>{
         this.toast.error(error.error);
       },
-      complete:()=>console.log('Login request completed')
+      complete:()=>{console.log('Login request completed');this.toast.success("Success");}
     })
   }
   logout(){

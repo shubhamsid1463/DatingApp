@@ -12,11 +12,13 @@
 </div>
 <nav class="flex gap-3 my-2 uppercase text-1xl text-white">
 @if(AccountService.currentUser()) {
-  <a routerLink="/members" routerLinkActive="font-bold text-accent">Matches</a>
+<a routerLink="/members" routerLinkActive="font-bold text-accent">Matches</a>
 <a routerLink="/lists" routerLinkActive="font-bold text-accent">List</a>
 <a routerLink="/messages" routerLinkActive="font-bold text-accent">Messages</a>
 
 }
+<a routerLink="/errors" routerLinkActive="font-bold text-accent">Test Errors</a>
+
   </nav>
 @if(AccountService.currentUser(); as user) {
     <div class="dropdown dropdown-left flex align-middle ml-auto gap-3">
