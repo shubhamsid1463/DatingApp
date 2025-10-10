@@ -20,6 +20,7 @@ public class Member
     public required string Country { get; set; }
     [JsonIgnore]
     public List<Photo> Photos { get; set; } = [];
+    [JsonIgnore]
     // Navigation property
     [ForeignKey(nameof(Id))]
     public AppUser User { get; set; } = null!;

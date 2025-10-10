@@ -1,8 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AccountService } from '../../services/account-service';
 import { Router, RouterLink ,RouterLinkActive} from '@angular/router';
 import { ToastService } from '../../../core/services/toast-service';
+import { themes } from '../thems';
 @Component({
   selector: 'app-nav',
   imports: [FormsModule, RouterLink, RouterLinkActive],
@@ -10,11 +11,25 @@ import { ToastService } from '../../../core/services/toast-service';
   styleUrl: './nav.css'
 })
 
-export class Nav {
+export class Nav  implements OnInit{
   protected AccountService=inject(AccountService);
   private router=inject(Router);
   private toast =inject(ToastService);
   protected creds: { email: string; password: string } = { email: '', password: '' };
+  protected selectedtheme=signal<string>(localStorage.getItem('theme')||'light')
+  protected theme=themes;
+  
+  ngOnInit(): void {
+    document.documentElement.setAttribute('data-theme',this.selectedtheme())
+  }
+  handleSeletedTheme(theme :string)
+  {
+    this.selectedtheme.set(theme)
+    localStorage.setItem('theme',theme)
+    document.documentElement.setAttribute('data-theme',theme)
+    const elem=document.activeElement as HTMLDivElement;
+    if(elem)elem.blur();
+  }
   Login(){
     this.AccountService.login(this.creds).subscribe({
       next:()=>{ this.router.navigateByUrl('/members');},
