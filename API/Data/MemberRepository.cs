@@ -17,6 +17,7 @@ public class MemberRepository(AppDbContext context) : IMemberRepository
     public async Task<IReadOnlyList<Member>> GetMembersAsync()
     {
         return await context.Members
+        .Include(u => u.User)
             .Include(p => p.Photos)
         .ToListAsync();
     }
@@ -43,6 +44,7 @@ public class MemberRepository(AppDbContext context) : IMemberRepository
     {
         return await context.Members
             .Include(u => u.User)
+            .Include(p => p.Photos)
             .SingleOrDefaultAsync(x => x.Id == id);
     }
 }

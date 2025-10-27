@@ -1,18 +1,60 @@
 
-<div class="card bg-base-100 w1/2 mx-auto flex flex-col p6 rounded-lg shadow-lg">
+<div class="card bg-base-100 w-full mx-auto flex flex-col p6 rounded-lg shadow-lg">
     <div class="card-title justify-center text-3xl text-primary"> Sign up</div>
         <div class="card-body w-full">
-            <form #registerForm="ngForm" class="flex flex-col gap-4 w-full" (ngSubmit)="register()">
-                <input type="text" name="username" [(ngModel)]="creds.displayName" required placeholder="Username" class="input input-bordered w-full" />
-                <input type="text" name="email" [(ngModel)]="creds.email" required placeholder="Email" class="input input-bordered w-full" />
-               
-                    <input type="password" name="password" [(ngModel)]="creds.password" required placeholder="Password" class="input input-bordered w-full" (click)="showPassword('password')"  />
-                
-                <input type="password" name="confirmPassword" [(ngModel)]="creds.password" required placeholder="Confirm Password" class="input input-bordered w-full" (click)="showPassword('confirmPassword')" />
-                <div class="flex items-center justify-end gap-3">
-                    <button (click)="cancel()" class="btn" type="button">cancel</button>
-                    <button class="btn btn-primary" type="submit">Register</button>
-                </div>
-            </form>
+            <ul class="steps steps-horizontal">
+                <li class="step step-primary">credential</li>
+                <li class="step" [class.step-primary]="currentStep()===2">profile</li>
+            </ul>
+            @if(currentStep()===1){
+                <form [formGroup]="credentialForm" class="flex flex-col gap-4 w-full steps" >
+                    
+                    <app-text-inputs [lable]="'Email'" [type]="'email'" formControlName="email" class="mt-2" ></app-text-inputs>
+                    <app-text-inputs [lable]="'Display Name'" formControlName="displayName"></app-text-inputs>
+                    <app-text-inputs [lable]="'Password'" [type]="'password'" formControlName="password"></app-text-inputs>
+                    <app-text-inputs [lable]="'Confirm Password'" [type]="'password'" formControlName="confirmPassword"></app-text-inputs>
+                    <div class="flex items-center justify-end gap-3">
+                        <button (click)="cancel()" class="btn" type="button">cancel</button>
+                        <button
+                        [disabled]="!credentialForm.valid"
+                        (click)="nextStep()"
+                         class="btn btn-primary" type="button">Next</button>
+                    </div> 
+                </form>
+            }
+            @if(currentStep()===2){
+                <form [formGroup]="profileForm" class="flex flex-col gap-4 w-full steps" (ngSubmit)="register()">
+                    <fieldset class="fieldset text-left w-1/2">
+                        <legend class="fieldset-legend w-1/2" >Gender</legend>
+                            <select class="select" formControlName="gender">
+                                <option  selected value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        <span class="label">Optional</span>
+                    </fieldset>
+                    <!-- <app-text-inputs [lable]="'Gender'" formControlName="gender" class="mt-2"></app-text-inputs> -->
+                    <app-text-inputs [lable]="'Date of Birth'" [type]="'date'" formControlName="dateOfBirth"></app-text-inputs>
+                    <app-text-inputs [lable]="'City'" formControlName="city"></app-text-inputs>
+                    <app-text-inputs [lable]="'Country'" formControlName="country"></app-text-inputs>
+                    <div class="flex items-center justify-end gap-3">
+                        <button (click)="previousStep()" class="btn" type="button">Previous</button>
+                        <button
+                        [disabled]="!profileForm.valid"
+                         class="btn btn-primary" type="submit">Register</button>
+                    </div> 
+                </form>
+            }
 
-    </div>  </div>
+    </div>  
+           @if(validationErrors().length>0)
+           {
+            <div class="mt-5 flex bg-gray-200 rounded-2xl w-1/2 p-3 mx-auto">
+                <ul class="flex flex-col text-error space-y-1 ">
+                    @for (error of validationErrors(); track $index) {
+                        <li>{{error}}</li>
+                    }
+                </ul>
+            </div>
+           }
+</div>
