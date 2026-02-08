@@ -13,6 +13,7 @@ import { Paginator } from "../../shared/paginator/paginator";
 })
 export class Lists implements OnInit {
 
+
   private likesService = inject(LikesService);
   protected paginatedResult=signal<PaginatedResult<Member>|null>(null);
   protected predicate='liked';
@@ -37,6 +38,12 @@ export class Lists implements OnInit {
       next:members=>this.paginatedResult.set(members)
     });
   }
+ 
+  onPageChange($event: { pageNumber: number; pageSize: number; }) {
+this.pageSize=$event.pageSize;
+    this.pageNumber=$event.pageNumber;
+    this.loadLikes();
+}
   onPageChanged(event :{pageNumber:number,pageSize:number}){
     this.pageSize=event.pageSize;
     this.pageNumber=event.pageNumber;

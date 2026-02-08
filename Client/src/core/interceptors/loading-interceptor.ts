@@ -18,8 +18,17 @@ export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
     }
   }
   const cacheKey=generateCacheKey(req.url,req.params);
+  if(req.method.includes('POST')&&req.url.includes('account'))  {
+    invalidateCache('/');
+  }
   if(req.method.includes('POST')&&req.url.includes('likes'))  {
     invalidateCache('/likes');
+  }
+   if(req.method.includes('POST')&&req.url.includes('messages'))  {
+    invalidateCache('/messages');
+  }
+  if(req.method.includes('DELETE')&&req.url.includes('messages'))  {
+    invalidateCache('/messages');
   }
   if(req.method==='GET') {
     const cachedResponse = cache.get(cacheKey);

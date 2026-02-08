@@ -15,7 +15,7 @@ export class AccountService {
   private baseUrl=environment.apiUrl;
   
   Register(creds:RegisterCreads){
-    return this.http.post<User>(this.baseUrl+'Account/register',creds).pipe(
+    return this.http.post<User>(this.baseUrl+'/register',creds).pipe(
      tap(
       user=>{
         if(user){

@@ -10,8 +10,11 @@
             </div>
         </div>
         @if(paginatedResult.metadata; as metadata){
-        <app-paginator [pageNumber]="metadata.currentPage" [totalCount]="metadata.totalCount"
-            [pageSize]="metadata.pageSize" [totalPages]="metadata.totalPage"
+        <app-paginator 
+        [pageNumber]="metadata.currentPage" 
+        [totalCount]="metadata.totalCount"
+            [pageSize]="metadata.pageSize"
+             [totalPages]="metadata.totalPages"
             (pageChange)="onPageChange($event)"></app-paginator>
         }
     </div>

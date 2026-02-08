@@ -9,16 +9,16 @@
         {{(pageNumber()-1)*pageSize()+1}}-{{lastItemIndex()}} of{{totalCount()}}
     </div>
     <div class="flex items-center gap-2">
-        <button class="but btn-circle btn-ghost"
-        [disabled]="pageNumber()===1"(click)="onPageChange(pageNumber()-1)"
+        <button class="btn btn-circle btn-ghost"
+        [disabled]="pageNumber()===1"(click)="onPageChange(pageNumber()-1,undefined)"
         >
             &larr;
         </button>
-        <div class="flex items-center gap-2" >
-        <button class="but btn-circle btn-ghost  bg-base-200"
-        [disabled]="pageNumber()>=totalPages()"(click)="onPageChange(pageNumber()+1)"
+        
+        <button class="btn btn-circle btn-ghost  bg-base-200"
+         [disabled]="pageNumber()>=totalPages()" (click)="onPageChange(pageNumber()+1,undefined)"
         >
             &rarr;
         </button>
-    </div>
+    </div> 
 </div>

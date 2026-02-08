@@ -16,7 +16,7 @@
                 [pageNumber]="metadata.currentPage"
                 [pageSize]="metadata.pageSize"
                 [totalCount]="metadata.totalCount"
-                [totalPages]="metadata.totalPage"
+                [totalPages]="metadata.totalPages"(pageChange)="onPageChange($event)"
                 />
             }
         </div>
