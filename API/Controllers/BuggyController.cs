@@ -1,4 +1,5 @@
 using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -25,6 +26,11 @@ public class BuggyController : BaseApiController
     public IActionResult GetBadRequest()
     {
         return BadRequest("This is a bad request");
+    }
+    [Authorize(Roles = "Admin")]
+    public IActionResult GetAdmin()
+    {
+        return Ok("This is an admin only endpoint");
     }
 }
 

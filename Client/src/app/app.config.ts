@@ -17,10 +17,10 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient( withInterceptors([jwtInterceptor,errorInterceptor,loadingInterceptor])),
     provideAppInitializer((async () => {
       const initService = inject(InitService);
-      return new Promise<void>((resolve) => {
-        setTimeout(() => {
+      return await new Promise<void>((resolve) => {
+        setTimeout(async() => {
           try {
-            return lastValueFrom(initService.init());
+            await lastValueFrom(initService.init());
           }
           finally {
             const splash = document.getElementById('initial-splash');

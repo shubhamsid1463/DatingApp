@@ -18,7 +18,7 @@
       <a routerLink="/members" routerLinkActive="font-bold text-accent">Matches</a>
       <a routerLink="/lists" routerLinkActive="font-bold text-accent">List</a>
       <a routerLink="/messages" routerLinkActive="font-bold text-accent">Messages</a>
-
+      <a *appHasRole="['Admin','Moderator']" routerLink="/admin" routerLinkActive="font-bold text-accent">Admin</a>
       }
       <a routerLink="/errors" routerLinkActive="font-bold text-accent">Test Errors</a>
 
@@ -57,7 +57,7 @@
     </div>
     }@else {
     <div class="flex align-middle ml-auto gap-3">
-      <form #loginForm="ngForm" (ngSubmit)="Login()" class="flex items-center gap-3">
+      <form (ngSubmit)="Login()" class="flex items-center gap-3">
         <input [(ngModel)]="creds.email" name="Frist" type="text" placeholder="email" class="input">
         <input [(ngModel)]="creds.password" name="Last" type="password" placeholder="password" class="input">
         <button type="submit" class="btn btn-sm btn-primary">Login</button>

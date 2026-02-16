@@ -19,8 +19,7 @@ public class PaginatedMetadata
 public class PaginationHelper
 {
 
-public static async Task<PaginatedResult<T>> CreateAsync<T>(IQueryable<T> query,
-          int PageSize,int PageNumber)
+public static async Task<PaginatedResult<T>> CreateAsync<T>(IQueryable<T> query,int PageSize,int PageNumber)
     {
     var count = await query.CountAsync();
     var items = await query.Skip((PageNumber - 1) * PageSize).Take(PageSize).ToListAsync();

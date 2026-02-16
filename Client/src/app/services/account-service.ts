@@ -15,11 +15,12 @@ export class AccountService {
   private baseUrl=environment.apiUrl;
   
   Register(creds:RegisterCreads){
-    return this.http.post<User>(this.baseUrl+'/register',creds).pipe(
+    return this.http.post<User>(this.baseUrl+'/register',creds,{withCredentials:true}).pipe(
      tap(
       user=>{
         if(user){
           this.setCurrentUser(user);
+          this.startTokenRefreshTimer();
         }
       }
      )
@@ -28,11 +29,12 @@ export class AccountService {
   login (creds:any)
   {
     console.log(creds);
-    return this.http.post<User>(this.baseUrl+'account/login',creds).pipe(
+    return this.http.post<User>(this.baseUrl+'account/login',creds,{withCredentials:true}).pipe(
      tap(
       user=>{
         if(user){
           this.setCurrentUser(user);
+          this.startTokenRefreshTimer();
         }
       }
      )
@@ -41,14 +43,34 @@ export class AccountService {
   }
   logout()
   {
-    localStorage.removeItem('user');
     localStorage.removeItem('filters');
     this.likesService.clearLikeIds();
     this.currentUser.set(null);
   }
+  refreshToken()
+  {
+    return this.http.post<User>(this.baseUrl+'account/refresh-token',{}, {withCredentials:true})
+  }
+  startTokenRefreshTimer()
+  {
+    setInterval(()=>{
+      this.http.post<User>(this.baseUrl+'account/refresh-token',{},
+        {withCredentials:true}).subscribe({
+          next: user => this.setCurrentUser(user),
+          error: error => console.log('Token refresh failed', error)
+        })},
+       5*60*1000)
+  }
   setCurrentUser(user:User){
-    localStorage.setItem('user',JSON.stringify(user));
+    user.roles=this.getRolesFromToken(user);
     this.currentUser.set(user);
     this.likesService.getLikeIds();
+  }
+  private getRolesFromToken(user:User):string[]
+  {
+    const payload=user.token.split('.')[1];
+    const roles=JSON.parse(atob(payload)).role;
+    if(Array.isArray(roles)) return roles;
+    else return [roles];
   }
 }

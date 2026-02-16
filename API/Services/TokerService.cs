@@ -1,14 +1,17 @@
 using System;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Threading.Tasks;
 using API.Entities;
 using API.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 namespace API.Services;
 
-public class TokenService(IConfiguration config) : ITokenService
+public class TokenService(IConfiguration config,UserManager<AppUser> userManager) : ITokenService
 {
-    public string CreateToken(AppUser user)
+    public async Task<string> CreateToken(AppUser user)
     {
         var tokenKey = config["TokenKey"] ?? throw new Exception("Token key not found");
         if (tokenKey.Length < 64)
@@ -16,10 +19,11 @@ public class TokenService(IConfiguration config) : ITokenService
         var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(tokenKey));
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Role, user.DisplayName),
+            new Claim(ClaimTypes.Email, user.Email!),
             new Claim(ClaimTypes.NameIdentifier,user.Id)
         };
+        var roles=await userManager.GetRolesAsync(user);
+        claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
@@ -30,5 +34,11 @@ public class TokenService(IConfiguration config) : ITokenService
         var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
+    }
+
+    public string GenerateToken()
+    {
+        var randonBytes = RandomNumberGenerator.GetBytes(64);
+        return Convert.ToBase64String(randonBytes);
     }
 }
